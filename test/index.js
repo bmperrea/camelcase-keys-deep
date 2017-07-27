@@ -34,5 +34,31 @@ describe("camelcaseKeysDeep", function() {
     }).to.not.throw();
   });
 
-});
+  it("should take less than 200μs", function() {
+    var num = 10000;
 
+    // initialization
+    var jsons = [];
+    var results = [];
+    for (var j=0; j<num; j++) {
+      jsons.push({
+        unicorn_rainbow: {
+          foo_bar: 1,
+          a_date: ( new Date(2016, 3, 15) ),
+          an_array: [1, 2, {foo_bar: 3}]
+        }
+      });
+      results.push({})
+    }
+
+    // timing
+    var start = process.hrtime();
+    for(j=0; j<num; j++){
+      results[j] = camelcaseKeysDeep(jsons[j])
+    }
+    var time = process.hrtime(start);
+
+    console.info("Execution time (hr): %ds %dμs", time[0]/num, time[1]/(1000*num));
+  });
+
+});

@@ -36,7 +36,6 @@
     "index.js"
   ],
   "dependencies": {
-    "camelcase": "^2.1.1",
     "map-obj": "^1.0.1"
   },
   "devDependencies": {
