@@ -1,5 +1,4 @@
 var camelcase = require("camelcase");
-var mapObj = require("map-obj");
 
 module.exports = function camelcaseKeysDeep(obj) {
   // Any falsy, which includes `null` whose typeof is `object`.
@@ -18,13 +17,14 @@ module.exports = function camelcaseKeysDeep(obj) {
   }
   // So, if this is still an `object`, we might be interested in it.
   if (typeof obj === "object") {
-    return mapObj(obj, function(key, value) {
+    return Object.keys(obj).reduce( function(newObj, key) {
       var newKey = camelcase(key);
       if (key !== newKey && newKey in obj) {
         throw new Error("Camelcased key `" + newKey + "` would overwrite existing key of the given JSON object");
       }
-      return [newKey, camelcaseKeysDeep(value)];
-    });
+      newObj[newKey] = camelcaseKeysDeep(obj[key]);
+      return newObj
+    }, {});
   }
   // Something else like a String or Number.
   return obj;
